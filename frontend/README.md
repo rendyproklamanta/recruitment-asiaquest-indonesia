@@ -1,5 +1,3 @@
-## How to Use
-
 # How To Use
 
 - Change environment
