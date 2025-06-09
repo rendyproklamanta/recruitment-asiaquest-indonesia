@@ -1,0 +1,49 @@
+{
+  "name": "recruitment-asiaquest-indonesia",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest",
+    "start": "cross-env NODE_ENV=production node app.js",
+    "dev": "cross-env NODE_ENV=development node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rendyproklamanta/recruitment-asiaquest-indonesia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rendyproklamanta/recruitment-asiaquest-indonesia/issues"
+  },
+  "homepage": "https://github.com/rendyproklamanta/recruitment-asiaquest-indonesia#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "sequelize-cli": "^6.6.3",
+    "supertest": "^7.1.1"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.test.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/swagger"
+    ]
+  }
+}
