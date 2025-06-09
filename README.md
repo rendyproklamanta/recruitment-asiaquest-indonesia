@@ -1,5 +1,8 @@
 # TODO List Project
 
+![App Screenshot](ss1.PNG)
+![App Screenshot](ss2.PNG)
+
 ## === Tech Stack ===
 
 ### Backend
