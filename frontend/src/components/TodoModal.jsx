@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux"
 import { addTodo, updateTodo } from "../store/todosSlice"
 import { Loader2, X } from "lucide-react"
 
-const TodoModal = ({ isOpen, onClose, todo = null, mode = "create" }) => {
+const TodoModal = ({ isOpen, onClose, todo = null, mode = "create", todos = [] }) => {
    const dispatch = useDispatch()
    const [isLoading, setIsLoading] = useState(false)
    const [formData, setFormData] = useState({
@@ -88,7 +88,7 @@ const TodoModal = ({ isOpen, onClose, todo = null, mode = "create" }) => {
             await dispatch(
                addTodo({
                   ...todoData,
-                  task_order: 0,
+                  task_order: todos?.length, // dynamically assign task_order
                }),
             ).unwrap()
          }

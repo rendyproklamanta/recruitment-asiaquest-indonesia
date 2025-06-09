@@ -4,19 +4,17 @@ const db = require('../models');
 
 let token = '';
 let todoId;
-let testUsername = 'todo-user';
-let testPassword = 'todo-user';
+let testEmail = 'userdemo@email.com';
+let testPassword = 'password';
 
 beforeAll(async () => {
-   await db.sequelize.sync({ force: true });
-
    await request(app).post('/auth/register').send({
-      username: testUsername,
+      email: testEmail,
       password: testPassword
    });
 
    const login = await request(app).post('/auth/login').send({
-      username: testUsername,
+      email: testEmail,
       password: testPassword
    });
    token = login.body.accessToken;
@@ -30,6 +28,7 @@ describe('Todo APIs', () => {
          .send({
             title: 'Test Todo',
             description: 'Testing',
+            task_order: 0,
             completed: false
          });
       expect(res.statusCode).toBe(200);

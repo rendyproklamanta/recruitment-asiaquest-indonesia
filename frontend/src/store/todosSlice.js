@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const API_URL = "http://localhost:3000/todos"
+const API_URL = import.meta.env.VITE_API_URL + '/todos';
 
 // Helper function to generate unique IDs
 const generateId = () => Date.now() + Math.random()
@@ -18,24 +18,24 @@ const getAuthHeaders = (getState) => {
 const mockTodos = [
    {
       id: 1,
-      title: "Learn React",
-      description: "Study React fundamentals and hooks",
+      title: "Task 1",
+      description: "This is sample task 1",
       completed: false,
       task_order: 0,
       createdAt: new Date().toISOString(),
    },
    {
       id: 2,
-      title: "Build a Todo App",
-      description: "Create a full-featured todo application with authentication",
+      title: "Task 2",
+      description: "This is sample task 2",
       completed: true,
       task_order: 1,
       createdAt: new Date().toISOString(),
    },
    {
       id: 3,
-      title: "Master Redux Toolkit",
-      description: "Learn advanced state management patterns",
+      title: "Task 3",
+      description: "This is sample task 3",
       completed: false,
       task_order: 2,
       createdAt: new Date().toISOString(),
@@ -131,23 +131,28 @@ export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id, { getS
 
 export const reorderTodos = createAsyncThunk(
    "todos/reorderTodos",
-   async (reorderedTodos, { getState }) => {
+   async (reorderedTodos, { getState, dispatch }) => {
       try {
-         const response = await fetch(`${API_URL}/reorder`, {
+         const response = await fetch(`${API_URL}/task/reorder`, {
             method: "PUT",
             headers: getAuthHeaders(getState),
             body: JSON.stringify({ todos: reorderedTodos }),
-         })
+         });
          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`)
+            throw new Error(`HTTP error! status: ${response.status}`);
          }
-         return await response.json()
+         // const res = await response.json();
+         // after successful reorder, fetch updated todos list
+         const fetchResponse = await dispatch(fetchTodos());
+         // fetchResponse.payload will be the updated todos array
+         return fetchResponse.payload;
       } catch (error) {
-         console.warn("API not available, using local state:", error.message)
-         return reorderedTodos
+         console.warn("API not available, using local state:", error.message);
+         return reorderedTodos; // fallback to local reorderedTodos
       }
-   },
-)
+   }
+);
+
 
 const todosSlice = createSlice({
    name: "todos",

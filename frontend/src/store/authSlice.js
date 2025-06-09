@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const API_BASE_URL = "http://localhost:3000"
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const loginUser = createAsyncThunk("auth/loginUser", async ({ email, password }, { rejectWithValue }) => {
    try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/login`, {
          method: "POST",
          headers: {
             "Content-Type": "application/json",

@@ -36,16 +36,18 @@ const TodoList = ({ filter = "all" }) => {
       setEditingTodo(null)
    }
 
-   const filteredTodos = todos?.filter((todo) => {
-      switch (filter) {
-         case "completed":
-            return todo.completed
-         case "active":
-            return !todo.completed
-         default:
-            return true
-      }
-   })
+   const filteredTodos = todos
+      ?.filter((todo) => {
+         switch (filter) {
+            case "completed":
+               return todo.completed
+            case "active":
+               return !todo.completed
+            default:
+               return true
+         }
+      })
+      .sort((a, b) => a.task_order - b.task_order) // sort by task_order ascending
 
    const handleDragEnd = (result) => {
       if (!result.destination) return
@@ -202,7 +204,7 @@ const TodoList = ({ filter = "all" }) => {
                                           <TodoItem
                                              todo={todo}
                                              index={index}
-                                             dragHandleProps={provided.dragHandleProps}
+                                             dragHandleProps={todo.completed ? null : provided.dragHandleProps} // disable draggable if task completed
                                              onEdit={handleEditTodo}
                                           />
                                        </div>
@@ -222,7 +224,7 @@ const TodoList = ({ filter = "all" }) => {
 
 
 
-         <TodoModal isOpen={isModalOpen} onClose={handleCloseModal} todo={editingTodo} mode={modalMode} onSuccess={() => dispatch(fetchTodos())} />
+         <TodoModal isOpen={isModalOpen} onClose={handleCloseModal} todo={editingTodo} mode={modalMode} onSuccess={() => dispatch(fetchTodos())} todos={todos} />
       </div>
    )
 }

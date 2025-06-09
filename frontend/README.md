@@ -1,3 +1,23 @@
-# React19-Tailwind4-Shadcn
+## How to Use
 
-A boilerplate of React Js 19 with vite v6, Tailwind v4 and Shadcn ui
+# How To Use
+
+- Change environment
+
+```sh
+copy .env.example to .env
+```
+
+- Preparation
+
+```sh
+npm install
+```
+
+- Run!
+
+```sh
+npm run dev
+```
+
+- Open URL : <http://localhost:5173>

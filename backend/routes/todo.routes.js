@@ -11,7 +11,8 @@ const {
   getTodos,
   updateTodo,
   deleteTodo,
-  getTodo
+  getTodo,
+  reorderTodo
 } = require('../controllers/todo.controller');
 
 const { isAuth } = require('../middlewares/auth.middleware');
@@ -201,5 +202,31 @@ router.put('/:id', updateTodo);
  *         description: Todo not found
  */
 router.delete('/:id', deleteTodo);
+
+/**
+ * @swagger
+ * /reorder:
+ *   post:
+ *     summary: Reorder a todo by ID
+ *     tags: [Todos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Todo ID
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       200:
+ *         description: Reorder successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Todo not found
+ */
+router.put('/task/reorder', reorderTodo);
 
 module.exports = router;

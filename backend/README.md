@@ -34,10 +34,16 @@ npm run dev
 
 ## More commands
 
-- Create schema/migration
+- Generate schema/migration
 
 ```sh
 npx sequelize-cli migration:generate --name update-blablabla
+```
+
+- Generate seeder
+
+```sh
+npx sequelize-cli seed:generate --name demo-user
 ```
 
 - Run unit test
