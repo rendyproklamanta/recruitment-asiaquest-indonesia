@@ -26,10 +26,10 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - email
  *               - password
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *               password:
  *                 type: string
@@ -38,7 +38,7 @@ const router = express.Router();
  *         description: User created
  */
 router.post('/register', [
-  body('username').isString().notEmpty(),
+  body('email').isString().notEmpty(),
   body('password').isLength({ min: 6 }),
 ], register);
 
@@ -55,10 +55,10 @@ router.post('/register', [
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - email
  *               - password
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *                 example: user1
  *               password:

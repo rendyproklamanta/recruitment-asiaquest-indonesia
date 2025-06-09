@@ -12,10 +12,18 @@ copy .env.example to .env
 npm install
 ```
 
+- Open MySQL/Mariadb client -> Create database name :
+
+```sh
+asiaquest_db : for dev purpose
+asiaquest_test : for test purpose
+```
+
 - Migrate DB
 
 ```sh
-npx sequelize-cli db:migrate --force
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
 ```
 
 - Run!
