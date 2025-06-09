@@ -88,7 +88,7 @@ const TodoModal = ({ isOpen, onClose, todo = null, mode = "create" }) => {
             await dispatch(
                addTodo({
                   ...todoData,
-                  order: 0,
+                  task_order: 0,
                }),
             ).unwrap()
          }

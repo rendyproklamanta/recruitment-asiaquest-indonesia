@@ -29,19 +29,18 @@ export const loginUser = createAsyncThunk("auth/loginUser", async ({ email, pass
 
       // Mock validation
       if (email === "user@example.com" && password === "password") {
-         // const mockData = {
-         //    token: "mock-jwt-token-" + Date.now(),
-         //    user: {
-         //       id: 1,
-         //       email: email,
-         //       name: "John Doe",
-         //       avatar: "/placeholder.svg?height=32&width=32",
-         //    },
-         // }
-         // localStorage.setItem("token", mockData.token)
-         // localStorage.setItem("user", JSON.stringify(mockData.user))
-         // return mockData
-         return null;
+         const mockData = {
+            token: "mock-jwt-token-" + Date.now(),
+            user: {
+               id: 1,
+               email: email,
+               name: "John Doe",
+               avatar: "/placeholder.svg?height=32&width=32",
+            },
+         }
+         localStorage.setItem("token", mockData.token)
+         localStorage.setItem("user", JSON.stringify(mockData.user))
+         return mockData
       } else {
          return rejectWithValue("Invalid credentials")
       }

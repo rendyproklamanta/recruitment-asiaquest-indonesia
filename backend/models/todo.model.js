@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    task_order: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     completed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false

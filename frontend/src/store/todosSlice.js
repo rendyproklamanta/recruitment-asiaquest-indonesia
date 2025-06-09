@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 
-const API_URL = "http://localhost/todos"
+const API_URL = "http://localhost:3000/todos"
 
 // Helper function to generate unique IDs
 const generateId = () => Date.now() + Math.random()
@@ -21,7 +21,7 @@ const mockTodos = [
       title: "Learn React",
       description: "Study React fundamentals and hooks",
       completed: false,
-      order: 0,
+      task_order: 0,
       createdAt: new Date().toISOString(),
    },
    {
@@ -29,7 +29,7 @@ const mockTodos = [
       title: "Build a Todo App",
       description: "Create a full-featured todo application with authentication",
       completed: true,
-      order: 1,
+      task_order: 1,
       createdAt: new Date().toISOString(),
    },
    {
@@ -37,13 +37,13 @@ const mockTodos = [
       title: "Master Redux Toolkit",
       description: "Learn advanced state management patterns",
       completed: false,
-      order: 2,
+      task_order: 2,
       createdAt: new Date().toISOString(),
    },
 ]
 
 // Async thunks for API calls with JWT authentication
-export const fetchTodos = createAsyncThunk("todos/fetchTodos", async (_, { getState, rejectWithValue }) => {
+export const fetchTodos = createAsyncThunk("todos/fetchTodos", async (_, { getState }) => {
    try {
       const response = await fetch(API_URL, {
          headers: getAuthHeaders(getState),
@@ -51,14 +51,15 @@ export const fetchTodos = createAsyncThunk("todos/fetchTodos", async (_, { getSt
       if (!response.ok) {
          throw new Error(`HTTP error! status: ${response.status}`)
       }
-      return await response.json()
+      const res = await response.json()
+      return res.data
    } catch (error) {
       console.warn("API not available, using local mock data:", error.message)
       return mockTodos
    }
 })
 
-export const addTodo = createAsyncThunk("todos/addTodo", async (todoData, { getState, rejectWithValue }) => {
+export const addTodo = createAsyncThunk("todos/addTodo", async (todoData, { getState }) => {
    try {
       const response = await fetch(API_URL, {
          method: "POST",
@@ -68,7 +69,9 @@ export const addTodo = createAsyncThunk("todos/addTodo", async (todoData, { getS
       if (!response.ok) {
          throw new Error(`HTTP error! status: ${response.status}`)
       }
-      return await response.json()
+
+      const res = await response.json()
+      return res.data
    } catch (error) {
       console.warn("API not available, using local state:", error.message)
       return {
@@ -81,7 +84,7 @@ export const addTodo = createAsyncThunk("todos/addTodo", async (todoData, { getS
 
 export const updateTodo = createAsyncThunk(
    "todos/updateTodo",
-   async ({ id, ...todoData }, { getState, rejectWithValue }) => {
+   async ({ id, ...todoData }, { getState }) => {
       try {
          const response = await fetch(`${API_URL}/${id}`, {
             method: "PUT",
@@ -91,7 +94,14 @@ export const updateTodo = createAsyncThunk(
          if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`)
          }
-         return await response.json()
+
+         const res = await response.json()
+
+         return {
+            ...todoData,
+            id,
+            createdAt: res.data.createdAt || new Date().toISOString(),
+         };
       } catch (error) {
          console.warn("API not available, using local state:", error.message)
          return {
@@ -103,7 +113,7 @@ export const updateTodo = createAsyncThunk(
    },
 )
 
-export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id, { getState, rejectWithValue }) => {
+export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id, { getState }) => {
    try {
       const response = await fetch(`${API_URL}/${id}`, {
          method: "DELETE",
@@ -121,7 +131,7 @@ export const deleteTodo = createAsyncThunk("todos/deleteTodo", async (id, { getS
 
 export const reorderTodos = createAsyncThunk(
    "todos/reorderTodos",
-   async (reorderedTodos, { getState, rejectWithValue }) => {
+   async (reorderedTodos, { getState }) => {
       try {
          const response = await fetch(`${API_URL}/reorder`, {
             method: "PUT",
@@ -177,16 +187,19 @@ const todosSlice = createSlice({
          })
          // Add todo
          .addCase(addTodo.fulfilled, (state, action) => {
-            state.items.push(action.payload)
+            state.items.push(action.payload);
          })
          .addCase(addTodo.rejected, (state, action) => {
             state.error = action.error.message
          })
          // Update todo
          .addCase(updateTodo.fulfilled, (state, action) => {
-            const index = state.items.findIndex((todo) => todo.id === action.payload.id)
+            const updatedTodo = action.payload;
+            if (!updatedTodo) return;
+
+            const index = state.items.findIndex(todo => todo.id === updatedTodo.id);
             if (index !== -1) {
-               state.items[index] = action.payload
+               state.items[index] = updatedTodo;
             }
          })
          .addCase(updateTodo.rejected, (state, action) => {

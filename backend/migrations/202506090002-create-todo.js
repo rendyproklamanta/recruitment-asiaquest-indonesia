@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      task_order: {
+        type: Sequelize.STRING,
+        defaultValue: false
+      },
       completed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false

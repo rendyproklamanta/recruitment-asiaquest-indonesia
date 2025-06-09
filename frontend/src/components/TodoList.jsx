@@ -17,7 +17,7 @@ const TodoList = ({ filter = "all" }) => {
       if (status === "idle") {
          dispatch(fetchTodos())
       }
-   }, [status, dispatch])
+   }, [status, error, dispatch])
 
    const handleCreateTodo = () => {
       setEditingTodo(null)
@@ -36,6 +36,17 @@ const TodoList = ({ filter = "all" }) => {
       setEditingTodo(null)
    }
 
+   const filteredTodos = todos?.filter((todo) => {
+      switch (filter) {
+         case "completed":
+            return todo.completed
+         case "active":
+            return !todo.completed
+         default:
+            return true
+      }
+   })
+
    const handleDragEnd = (result) => {
       if (!result.destination) return
 
@@ -47,25 +58,14 @@ const TodoList = ({ filter = "all" }) => {
 
       const reorderedTodos = items.map((item, index) => ({
          ...item,
-         order: index,
+         task_order: index,
       }))
 
       dispatch(reorderTodos(reorderedTodos))
    }
 
-   const filteredTodos = todos.filter((todo) => {
-      switch (filter) {
-         case "completed":
-            return todo.completed
-         case "active":
-            return !todo.completed
-         default:
-            return true
-      }
-   })
-
-   const completedCount = todos.filter((todo) => todo.completed).length
-   const totalCount = todos.length
+   const completedCount = todos?.filter((todo) => todo.completed).length
+   const totalCount = todos?.length
    const progressPercentage = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
    if (status === "loading") {
@@ -119,7 +119,7 @@ const TodoList = ({ filter = "all" }) => {
             </div>
             <div className="flex items-center gap-2">
                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  {filteredTodos.length} tasks
+                  {filteredTodos?.length} tasks
                </span>
                {isOffline && (
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700">
@@ -153,7 +153,7 @@ const TodoList = ({ filter = "all" }) => {
          <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="p-6 border-b border-gray-200">
                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900">Tasks</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">Todo List</h2>
                   <button
                      onClick={handleCreateTodo}
                      className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -165,7 +165,7 @@ const TodoList = ({ filter = "all" }) => {
             </div>
             <div className="p-6">
                {/* Todo List */}
-               {filteredTodos.length === 0 ? (
+               {filteredTodos?.length === 0 ? (
                   <div className="text-center py-12">
                      <ListTodo className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                      <p className="text-lg font-medium text-gray-500">
@@ -191,7 +191,7 @@ const TodoList = ({ filter = "all" }) => {
                      <Droppable droppableId="todos">
                         {(provided) => (
                            <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-2">
-                              {filteredTodos.map((todo, index) => (
+                              {filteredTodos?.map((todo, index) => (
                                  <Draggable key={todo.id} draggableId={todo.id.toString()} index={index}>
                                     {(provided, snapshot) => (
                                        <div
@@ -222,7 +222,7 @@ const TodoList = ({ filter = "all" }) => {
 
 
 
-         <TodoModal isOpen={isModalOpen} onClose={handleCloseModal} todo={editingTodo} mode={modalMode} />
+         <TodoModal isOpen={isModalOpen} onClose={handleCloseModal} todo={editingTodo} mode={modalMode} onSuccess={() => dispatch(fetchTodos())} />
       </div>
    )
 }
